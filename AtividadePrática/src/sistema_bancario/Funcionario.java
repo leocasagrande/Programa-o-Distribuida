@@ -1,36 +1,63 @@
 package sistema_bancario;
 
-public class Funcionario extends Thread{
+public class Funcionario implements Runnable{
 
-	private String nome;
+	private Banco banco;
 	private Conta contaSalario;
 	private Conta contaInvest;
+	private int contador = 1;
+	private int id;
 	
-	public Funcionario(String nome) {
-		this.nome = nome;
-		this.contaSalario = new Conta(0.0);
-		this.contaInvest = new Conta(0.0);
+	public Funcionario(Banco banco) {
+		this.banco = banco;
+		this.contaSalario = new Conta("Salário do funcionário " + id);
+		this.contaInvest = new Conta("Investimento do funcionário " + id);
 	}
 
-	public String getNome() {
-		return nome;
+	public Funcionario(Banco banco, Conta contaSalario, Conta contaInvest) {
+		super();
+		this.banco = banco;
+		this.contaSalario = contaSalario;
+		this.contaInvest = contaInvest;
 	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
+
+	public Banco getBanco() {
+		return banco;
 	}
-	
-	public void investimento(Double salario) {
-		
+
+	public void setBanco(Banco banco) {
+		this.banco = banco;
+	}
+
+	public Conta getContaSalario() {
+		return contaSalario;
+	}
+
+	public void setContaSalario(Conta contaSalario) {
+		this.contaSalario = contaSalario;
+	}
+
+	public Conta getContaInvest() {
+		return contaInvest;
+	}
+
+	public void setContaInvest(Conta contaInvest) {
+		this.contaInvest = contaInvest;
+	}
+
+	public void run() {
+		while(true) {
 		Double porcentInvest;
 		Double resto;
-		
+		Double salario = 1400.0;
 		porcentInvest = salario * 0.20;
 		resto = salario - porcentInvest;
+
+		synchronized(banco) {
+			banco.transferencia(contaSalario, contaInvest, porcentInvest);
+		}
 		
-		contaSalario.setSaldo(resto);
-		contaInvest.setSaldo(porcentInvest);
-		
+		}
 	}
 	
 	
