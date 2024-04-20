@@ -9,6 +9,7 @@ public class Funcionario implements Runnable{
 	private int id;
 	
 	public Funcionario(Banco banco) {
+		this.id = contador++;
 		this.banco = banco;
 		this.contaSalario = new Conta("Salário do funcionário " + id);
 		this.contaInvest = new Conta("Investimento do funcionário " + id);
@@ -46,19 +47,15 @@ public class Funcionario implements Runnable{
 	}
 
 	public void run() {
-		while(true) {
-		Double porcentInvest;
-		Double resto;
+		int contador = 0;
+		while(contador < 10 && contaSalario.getSaldo() > 0) {
 		Double salario = 1400.0;
-		porcentInvest = salario * 0.20;
-		resto = salario - porcentInvest;
-
 		synchronized(banco) {
-			banco.transferencia(contaSalario, contaInvest, porcentInvest);
+			banco.transferencia(contaSalario, contaInvest, salario * 0.20);
 		}
-		
-		}
+		contador++;
 	}
+}
 	
 	
 }

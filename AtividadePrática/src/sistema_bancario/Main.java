@@ -15,11 +15,14 @@ public class Main {
 		Banco banco = new Banco();
         List<Funcionario> funcionarios = new ArrayList<>();
         List<Cliente> clientes = new ArrayList<>();
-
+        List<Loja> lojas = new ArrayList<>();
+        
         banco = new Banco();
 
-        Loja loja = new Loja();
-        Loja loja2 = new Loja();
+        for(int i = 0; i < 2; i++) {
+        	Loja loja = new Loja(banco);
+        	lojas.add(loja);
+        }
 
         for (int i = 0; i < 4; i++) {
             Funcionario funcionario = new Funcionario(banco);
@@ -27,14 +30,17 @@ public class Main {
         }
 
         for (int i = 0; i < 5; i++) {
-            Cliente cliente = new Cliente(banco);
+            Cliente cliente = new Cliente(banco, lojas);
+            cliente.getConta().setSaldo(1000.0);
             clientes.add(cliente);
         }
 
         ExecutorService executor = Executors.newCachedThreadPool();
+        
 
-        executor.execute(loja);
-        executor.execute(loja2);
+        for(Loja loja : lojas) {
+        	executor.execute(loja);
+        }
         
         for (Funcionario funcionario : funcionarios) {
             executor.execute(funcionario);
@@ -43,8 +49,6 @@ public class Main {
         for (Cliente cliente : clientes) {
             executor.execute(cliente);
         }
-
-        executor.shutdown();
 
         try {
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
@@ -56,11 +60,11 @@ public class Main {
         for (Cliente cliente : clientes) {
             System.out.println("Cliente " + cliente.getId() + ": Saldo = R$" + cliente.getConta().getSaldo());
         }
-        
-        System.out.println("Saldo da Loja " + loja.getId() + ": R$" + loja.getConta().getSaldo());
-        System.out.println("Saldo da Loja " + loja2.getId() + ": R$" + loja2.getConta().getSaldo());
+        System.out.println("ACABOU");
+        executor.shutdown();
     }
 		
 
 }
+
 

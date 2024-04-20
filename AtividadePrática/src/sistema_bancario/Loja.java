@@ -10,13 +10,9 @@ public class Loja implements Runnable {
 	private int id;
 	
 	public Loja(Banco banco) {
+		this.id = contador++;
 		this.conta = new Conta("Loja " + id);	
 		this.banco = banco;
-		this.id = contador++;
-	}
-	
-	public Loja() {
-		
 	}
 	
 	public int getId() {
@@ -46,7 +42,7 @@ public class Loja implements Runnable {
 	public void run() {
         while (true) {
             if (conta.getSaldo() >= 1400) {
-                conta.adicionar(1400.0);
+                conta.adicionarValor(1400.0);
                 System.out.println("Pagamento feito pela loja " + id);
             }
         }

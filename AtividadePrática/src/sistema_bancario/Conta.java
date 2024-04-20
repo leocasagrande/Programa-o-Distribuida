@@ -3,16 +3,15 @@ package sistema_bancario;
 public class Conta {
 
 	public String conta;
-	public Double saldo;
+	public Double saldo = 0.0;
 	
 	
 	public Conta(String conta) {
 		this.conta = conta;
-		this.saldo = 1000.0;
+		this.saldo = 0.0;
 	}
 	
 	public Conta(String conta, Double saldo) {
-		super();
 		this.conta = conta;
 		this.saldo = saldo;
 	}
@@ -33,11 +32,11 @@ public class Conta {
 		this.saldo = saldo;
 	}
 	
-	public void adicionar(Double valor) {
+	public synchronized void adicionarValor(Double valor) {
 		saldo += valor;
 	}
 	
-	public void tirar(Double valor) {
+	public synchronized void tirarValor(Double valor) {
 		saldo -= valor;
 	}
 }
