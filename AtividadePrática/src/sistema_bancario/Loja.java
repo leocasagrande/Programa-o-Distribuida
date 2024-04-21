@@ -2,35 +2,32 @@ package sistema_bancario;
 
 import sistema_bancario.*;
 
-public class Loja implements Runnable {
-
-	private final Banco banco;
+public class Loja {
     private final Conta conta;
-    private final double salarioFuncionario = 1400;
-    private final Conta[] contasFuncionarios;
-    
-    public Loja(Banco banco, Conta conta, Conta[] contasFuncionarios) {
-        this.banco = banco;
+    private final Funcionario[] funcionarios;
+
+    public Loja(Conta conta, Funcionario[] funcionarios) {
         this.conta = conta;
-        this.contasFuncionarios = contasFuncionarios;
+        this.funcionarios = funcionarios;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            synchronized (conta) {
-                if (conta.getSaldo() >= 1400) {
-                    for (Conta funcionario : contasFuncionarios) {
-                        banco.transferir(conta, funcionario, salarioFuncionario);
-                        System.out.println("Salário pago para funcionário da loja " + conta.getNome() + ": R$" + salarioFuncionario);
-                    }
-                }
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void pagarSalarios() {
+        double totalSalario = 0;
+        for (Funcionario funcionario : funcionarios) {
+            totalSalario += funcionario.getSalario();
+        }
+        if (conta.getSaldo() >= totalSalario) {
+            for (Funcionario funcionario : funcionarios) {
+                funcionario.receberSalario();
+                conta.debitar(funcionario.getSalario());
             }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            System.out.println("Salários pagos para os funcionários da loja");
+        } else {
+            System.out.println("Saldo insuficiente para pagar os salários dos funcionários da loja");
         }
     }
 }

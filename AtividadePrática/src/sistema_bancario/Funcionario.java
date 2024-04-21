@@ -1,34 +1,31 @@
 package sistema_bancario;
 
-public class Funcionario implements Runnable{
+public class Funcionario extends Thread {
+    private final Conta salarioConta;
+    private final Conta investimentoConta;
+    private final double salario;
 
-	private final Conta contaSalario;
-    private final Conta contaInvest;
-    private final double salario = 1400;
+    public Funcionario(Conta salarioConta, Conta investimentoConta, double salario) {
+        this.salarioConta = salarioConta;
+        this.investimentoConta = investimentoConta;
+        this.salario = salario;
+    }
 
-    public Funcionario(Conta contaSalario, Conta contaInvest) {
-        this.contaSalario = contaSalario;
-        this.contaInvest = contaInvest;
+    public double getSalario() {
+        return salario;
+    }
+
+    public void receberSalario() {
+        salarioConta.creditar(salario);
+        double valorInvestimento = salario * 0.20;
+        investimentoConta.creditar(valorInvestimento);
+        System.out.println("Funcionário recebeu salário de R$ " + salario + " e investiu R$ " + valorInvestimento);
     }
 
     @Override
     public void run() {
-        while (contaSalario.getSaldo() > 0) {
-            synchronized (contaSalario) {
-                if (contaSalario.getSaldo() >= salario) {
-                    double valorInvestimento = salario * 0.2;
-                    contaSalario.debitar(salario);
-                    contaInvest.creditar(valorInvestimento);
-                    System.out.println("Funcionário recebeu salário de R$" + salario + " e investiu R$" + valorInvestimento);
-                }
-            }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        receberSalario();
     }
-	
-	
 }
+	
+	

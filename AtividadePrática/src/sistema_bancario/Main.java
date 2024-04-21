@@ -11,34 +11,62 @@ import sistema_bancario.*;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		 	Banco banco = new Banco();
-	        Conta contaLojaA = new Conta("Casa do Pão de Queijo", 0);
-	        Conta contaLojaB = new Conta("Biscoito Mineiro", 0);
-	        
-	        Conta[] contasFuncionarioA = {new Conta("Funcionário Jose", 0), new Conta("Investimento de Jose", 0)};
-	        Conta[] contasFuncionarioB = {new Conta("Funcionário Leonardo", 0), new Conta("Investimento de Leonardo", 0)};
-	        Conta[] contasFuncionarioC = {new Conta("Funcionário Arthur", 0), new Conta("Investimento de Arthur", 0)};
-	        Conta[] contasFuncionarioD = {new Conta("Funcionário Maria", 0), new Conta("Investimento de Maria", 0)};
-	        
-	        for (int i = 0; i < 4; i++) {
-	            Conta contaSalario = i < 2 ? contasFuncionarioA[0] : contasFuncionarioB[0];
-	            Conta contaInvestimento = i < 2 ? contasFuncionarioA[1] : contasFuncionarioB[1];
-	            new Thread(new Funcionario(contaSalario, contaInvestimento)).start();
-	        }
-	        
-	        new Thread(new Loja(banco, contaLojaA, contasFuncionarioA)).start();
-	        new Thread(new Loja(banco, contaLojaB, contasFuncionarioB)).start();
-	        new Thread(new Loja(banco, contaLojaA, contasFuncionarioC)).start();
-	        new Thread(new Loja(banco, contaLojaB, contasFuncionarioD)).start();
+        Conta contaBanco = new Conta("Banco", 0);
+        Conta contaLoja1 = new Conta("Loja 1", 0);
+        Conta contaLoja2 = new Conta("Loja 2", 0);
 
-	        new Thread(new Cliente(banco, new Conta("Cliente Roberto", 1000))).start();
-	        new Thread(new Cliente(banco, new Conta("Cliente Tulio", 1000))).start();
-	        new Thread(new Cliente(banco, new Conta("Cliente Bernardo", 1000))).start();
-	        new Thread(new Cliente(banco, new Conta("Cliente Julia", 1000))).start();
-	        new Thread(new Cliente(banco, new Conta("Cliente Clara", 1000))).start();
-	       
-	    }	
+        Conta contaInvestimento1 = new Conta("Investimento 1", 0);
+        Conta contaInvestimento2 = new Conta("Investimento 2", 0);
+
+        Funcionario[] funcionariosLoja1 = {
+                new Funcionario(contaLoja1, contaInvestimento1, 1400),
+                new Funcionario(contaLoja1, contaInvestimento1, 1400)
+        };
+
+        Funcionario[] funcionariosLoja2 = {
+                new Funcionario(contaLoja2, contaInvestimento2, 1400),
+                new Funcionario(contaLoja2, contaInvestimento2, 1400)
+        };
+
+        Loja loja1 = new Loja(contaLoja1, funcionariosLoja1);
+        Loja loja2 = new Loja(contaLoja2, funcionariosLoja2);
+
+        Cliente[] clientes = {
+                new Cliente(new Conta("Cliente Marcos", 1000)),
+                new Cliente(new Conta("Cliente Ana", 1000)),
+                new Cliente(new Conta("Cliente Tulio", 1000)),
+                new Cliente(new Conta("Cliente Gabriel", 1000)),
+                new Cliente(new Conta("Cliente Julia", 1000))
+        };
+
+        Banco banco = new Banco();
+
+        for (Cliente cliente : clientes) {
+            cliente.start();
+        }
+
+        for (Funcionario funcionario : funcionariosLoja1) {
+            funcionario.start();
+        }
+
+        for (Funcionario funcionario : funcionariosLoja2) {
+            funcionario.start();
+        }
+
+        for (Cliente cliente : clientes) {
+            for (Loja loja : new Loja[]{loja1, loja2}) {
+                banco.transferir(cliente.getConta(), loja.getConta(), 100);
+            }
+        }
+
+        loja1.pagarSalarios();
+        loja2.pagarSalarios();
+
+        // Exibir saldo final das contas
+        System.out.println("Saldo final da conta do Banco: " + contaBanco.getSaldo());
+        System.out.println("Saldo final da conta da Loja 1: " + contaLoja1.getSaldo());
+        System.out.println("Saldo final da conta da Loja 2: " + contaLoja2.getSaldo());
+    }
 
 }
 

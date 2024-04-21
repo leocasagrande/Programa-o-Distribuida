@@ -13,9 +13,9 @@ public class Banco {
             if (origem.getSaldo() >= valor) {
                 origem.debitar(valor);
                 destino.creditar(valor);
-                System.out.println("Transferência de R$" + valor + " realizada de " + origem.getNome() + " para " + destino.getNome());
+                System.out.println("Transferência de R$ " + valor + " de " + origem.getCliente() + " para " + destino.getCliente());
             } else {
-                System.out.println("Saldo insuficiente em " + origem.getNome() + " para transferência de R$" + valor);
+                System.out.println("Saldo insuficiente para transferência de " + origem.getCliente());
             }
         } finally {
             lock.unlock();
