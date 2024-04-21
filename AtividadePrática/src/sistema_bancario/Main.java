@@ -12,58 +12,33 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Banco banco = new Banco();
-        List<Funcionario> funcionarios = new ArrayList<>();
-        List<Cliente> clientes = new ArrayList<>();
-        List<Loja> lojas = new ArrayList<>();
-        
-        banco = new Banco();
+		 	Banco banco = new Banco();
+	        Conta contaLojaA = new Conta("Casa do Pão de Queijo", 0);
+	        Conta contaLojaB = new Conta("Biscoito Mineiro", 0);
+	        
+	        Conta[] contasFuncionarioA = {new Conta("Funcionário Jose", 0), new Conta("Investimento de Jose", 0)};
+	        Conta[] contasFuncionarioB = {new Conta("Funcionário Leonardo", 0), new Conta("Investimento de Leonardo", 0)};
+	        Conta[] contasFuncionarioC = {new Conta("Funcionário Arthur", 0), new Conta("Investimento de Arthur", 0)};
+	        Conta[] contasFuncionarioD = {new Conta("Funcionário Maria", 0), new Conta("Investimento de Maria", 0)};
+	        
+	        for (int i = 0; i < 4; i++) {
+	            Conta contaSalario = i < 2 ? contasFuncionarioA[0] : contasFuncionarioB[0];
+	            Conta contaInvestimento = i < 2 ? contasFuncionarioA[1] : contasFuncionarioB[1];
+	            new Thread(new Funcionario(contaSalario, contaInvestimento)).start();
+	        }
+	        
+	        new Thread(new Loja(banco, contaLojaA, contasFuncionarioA)).start();
+	        new Thread(new Loja(banco, contaLojaB, contasFuncionarioB)).start();
+	        new Thread(new Loja(banco, contaLojaA, contasFuncionarioC)).start();
+	        new Thread(new Loja(banco, contaLojaB, contasFuncionarioD)).start();
 
-        for(int i = 0; i < 2; i++) {
-        	Loja loja = new Loja(banco);
-        	lojas.add(loja);
-        }
-
-        for (int i = 0; i < 4; i++) {
-            Funcionario funcionario = new Funcionario(banco);
-            funcionarios.add(funcionario);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            Cliente cliente = new Cliente(banco, lojas);
-            cliente.getConta().setSaldo(1000.0);
-            clientes.add(cliente);
-        }
-
-        ExecutorService executor = Executors.newCachedThreadPool();
-        
-
-        for(Loja loja : lojas) {
-        	executor.execute(loja);
-        }
-        
-        for (Funcionario funcionario : funcionarios) {
-            executor.execute(funcionario);
-        }
-
-        for (Cliente cliente : clientes) {
-            executor.execute(cliente);
-        }
-
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Saldos finais:");
-        for (Cliente cliente : clientes) {
-            System.out.println("Cliente " + cliente.getId() + ": Saldo = R$" + cliente.getConta().getSaldo());
-        }
-        System.out.println("ACABOU");
-        executor.shutdown();
-    }
-		
+	        new Thread(new Cliente(banco, new Conta("Cliente Roberto", 1000))).start();
+	        new Thread(new Cliente(banco, new Conta("Cliente Tulio", 1000))).start();
+	        new Thread(new Cliente(banco, new Conta("Cliente Bernardo", 1000))).start();
+	        new Thread(new Cliente(banco, new Conta("Cliente Julia", 1000))).start();
+	        new Thread(new Cliente(banco, new Conta("Cliente Clara", 1000))).start();
+	       
+	    }	
 
 }
 

@@ -1,42 +1,50 @@
 package sistema_bancario;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Conta {
 
-	public String conta;
-	public Double saldo = 0.0;
-	
-	
-	public Conta(String conta) {
-		this.conta = conta;
-		this.saldo = 0.0;
-	}
-	
-	public Conta(String conta, Double saldo) {
-		this.conta = conta;
+	private final String nome;
+    private double saldo;
+    private final Lock lock = new ReentrantLock();
+
+    public Conta(String nome, double saldo) {
+        this.nome = nome;
+        this.saldo = saldo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
 		this.saldo = saldo;
 	}
-	
-	public String getConta() {
-		return conta;
-	}
-	
-	public void setConta(String conta) {
-		this.conta = conta;
-	}
-	
-	public Double getSaldo() {
-		return saldo;
-	}
-	
-	public void setSaldo(Double saldo) {
-		this.saldo = saldo;
-	}
-	
-	public synchronized void adicionarValor(Double valor) {
-		saldo += valor;
-	}
-	
-	public synchronized void tirarValor(Double valor) {
-		saldo -= valor;
-	}
+
+    public void creditar(double valor) {
+        lock.lock();
+        try {
+            System.out.println("Creditando R$" + valor + " na conta " + nome + " -------- " + "Novo saldo da conta " + nome + ": R$" + saldo);
+            System.out.println("SALDO: " + saldo);
+            saldo = saldo + valor;
+            System.out.println("SALDO ATUALIZADO: " + saldo);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void debitar(double valor) {
+        lock.lock();
+        try {
+            System.out.println("Debitando R$" + valor + " da conta " + nome + " -------- " + "Novo saldo da conta " + nome + ": R$" + saldo);
+            saldo = saldo - valor;
+        } finally {
+            lock.unlock();
+        }
+    }
 }

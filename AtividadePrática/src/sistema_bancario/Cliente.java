@@ -5,62 +5,27 @@ import java.util.Random;
 
 public class Cliente implements Runnable{
 
-	private List<Loja> lojas;
-	private Banco banco;
-	private Conta conta;
-	private int id;
-	public int contador = 1;
-	
-	public Cliente(Banco banco, List<Loja> lojas) {
-		this.id = contador++;
-		this.conta = new Conta("Cliente " + id, 1000.0);
-		this.banco = banco;
-		this.lojas = lojas;
-	}
-	
-	public List<Loja> getLojas() {
-		return lojas;
-	}
+	private final Banco banco;
+    private final Conta conta;
+    private final String[] lojas = {"Casa do Pão de Queijo", "Biscoito Mineiro"};
+    private final double[] valores = {100, 200};
+    private int lojaAtual = 0;
 
-	public void setLojas(List<Loja> lojas) {
-		this.lojas = lojas;
-	}
+    public Cliente(Banco banco, Conta conta) {
+        this.banco = banco;
+        this.conta = conta;
+    }
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
-	public Conta getConta() {
-		return conta;
-	}
-
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
-	public void run() {
-		Random random = new Random();
-		while(conta.getSaldo() > 0) {
-			int n =  (random.nextInt(2) + 1) * 100;
-			Double valor = (double) n;
-			synchronized (banco) {
-				banco.transferencia(conta, lojas.get(random.nextInt(lojas.size())).getConta(), valor);
-			}
-		}
-		
-	}
-	
+    public void run() {
+        while (true) {
+            double valorCompra = valores[lojaAtual];
+            synchronized (conta) {
+                if (conta.getSaldo() >= valorCompra) {
+                    banco.transferir(conta, new Conta(lojas[lojaAtual], valorCompra), valorCompra);
+                    lojaAtual = (lojaAtual + 1) % 2;
+                }
+            }
+        }
+    }
 	
 }

@@ -4,47 +4,33 @@ import sistema_bancario.*;
 
 public class Loja implements Runnable {
 
-	private Conta conta;
-	private Banco banco;
-	private int contador = 1;
-	private int id;
-	
-	public Loja(Banco banco) {
-		this.id = contador++;
-		this.conta = new Conta("Loja " + id);	
-		this.banco = banco;
-	}
-	
-	public int getId() {
-		return id;
-	}
+	private final Banco banco;
+    private final Conta conta;
+    private final double salarioFuncionario = 1400;
+    private final Conta[] contasFuncionarios;
+    
+    public Loja(Banco banco, Conta conta, Conta[] contasFuncionarios) {
+        this.banco = banco;
+        this.conta = conta;
+        this.contasFuncionarios = contasFuncionarios;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Conta getConta() {
-		return conta;
-	}
-
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-	
-	public void run() {
+    @Override
+    public void run() {
         while (true) {
-            if (conta.getSaldo() >= 1400) {
-                conta.adicionarValor(1400.0);
-                System.out.println("Pagamento feito pela loja " + id);
+            synchronized (conta) {
+                if (conta.getSaldo() >= 1400) {
+                    for (Conta funcionario : contasFuncionarios) {
+                        banco.transferir(conta, funcionario, salarioFuncionario);
+                        System.out.println("Salário pago para funcionário da loja " + conta.getNome() + ": R$" + salarioFuncionario);
+                    }
+                }
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-	}
+    }
 }
