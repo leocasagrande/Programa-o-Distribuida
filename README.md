@@ -1,6 +1,6 @@
 ## Apresentação do Sistema AtividadePrática, primeiro projeto do semestre 2024/01
 
-Este projeto representa um sistema bancário implementado em Java 17, utilizando threads e os conceitos vistos em sala. O sistema contém as seguintes entidades:
+Este projeto representa um sistema bancário, utilizando threads e os conceitos vistos em sala. O sistema contém as seguintes entidades:
 
 - Banco
 - Loja
