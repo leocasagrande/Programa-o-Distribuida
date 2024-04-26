@@ -1,14 +1,22 @@
 package sistema_bancario;
 
 public class Funcionario extends Thread {
-    private final Conta salarioConta;
-    private final Conta investimentoConta;
+    private final Conta contaSalario;
+    private final Conta contaInvest;
     private final double salario;
 
-    public Funcionario(Conta salarioConta, Conta investimentoConta, double salario) {
-        this.salarioConta = salarioConta;
-        this.investimentoConta = investimentoConta;
+    public Funcionario(Conta contaSalario, Conta contaInvest, double salario) {
+        this.contaSalario = contaSalario;
+        this.contaInvest = contaInvest;
         this.salario = salario;
+    }
+    
+    public Conta getContaInvest() {
+    	return contaInvest;
+    }
+    
+    public Conta getContaSalario() {
+    	return contaSalario;
     }
 
     public double getSalario() {
@@ -16,9 +24,9 @@ public class Funcionario extends Thread {
     }
 
     public void receberSalario() {
-        salarioConta.creditar(salario);
+        contaSalario.creditar(salario);
         double valorInvestimento = salario * 0.20;
-        investimentoConta.creditar(valorInvestimento);
+        contaInvest.creditar(valorInvestimento);
         System.out.println("Funcionário recebeu salário de R$ " + salario + " e investiu R$ " + valorInvestimento);
     }
 

@@ -11,6 +11,7 @@ import sistema_bancario.*;
 public class Main {
 
 	public static void main(String[] args) {
+		//Criando os objetos de cada classe
         Conta contaBanco = new Conta("Banco", 0);
         Conta contaLoja1 = new Conta("Loja 1", 0);
         Conta contaLoja2 = new Conta("Loja 2", 0);
@@ -41,6 +42,8 @@ public class Main {
 
         Banco banco = new Banco();
 
+        
+        //Startando threads
         for (Cliente cliente : clientes) {
             cliente.start();
         }
@@ -59,6 +62,7 @@ public class Main {
             }
         }
 
+        //Pagando salario dos funcionarios
         loja1.pagarSalarios();
         loja2.pagarSalarios();
 
@@ -66,6 +70,19 @@ public class Main {
         System.out.println("Saldo final da conta do Banco: " + contaBanco.getSaldo());
         System.out.println("Saldo final da conta da Loja 1: " + contaLoja1.getSaldo());
         System.out.println("Saldo final da conta da Loja 2: " + contaLoja2.getSaldo());
+        int id = 1;
+        for (Funcionario funcionario : funcionariosLoja1) {
+        	System.out.println("Saldo final do salario do funcionario " + id + " da Loja 1: " + funcionario.getContaSalario().getSaldo());
+        	id++;
+        }
+        id = 1;
+        for (Funcionario funcionario : funcionariosLoja2) {
+        	System.out.println("Saldo final do salario do funcionario " + id + " da Loja 2: " + funcionario.getContaSalario().getSaldo());
+        	id++;
+        }
+        for (Cliente cliente : clientes) {
+        	System.out.println("Saldo final do cliente " + cliente.getConta().getCliente() + ": "  + cliente.getConta().getSaldo());
+        }
     }
 
 }

@@ -16,11 +16,11 @@ public class Loja {
     }
 
     public void pagarSalarios() {
-        double totalSalario = 0;
+        double salarioTotal = 0;
         for (Funcionario funcionario : funcionarios) {
-            totalSalario += funcionario.getSalario();
+            salarioTotal += funcionario.getSalario();
         }
-        if (conta.getSaldo() >= totalSalario) {
+        if (conta.getSaldo() >= salarioTotal) {
             for (Funcionario funcionario : funcionarios) {
                 funcionario.receberSalario();
                 conta.debitar(funcionario.getSalario());
