@@ -20,3 +20,8 @@ O sistema é composto por:
 ## Resultados
 
 O sistema exibe o valor das transferências e o saldo final de cada conta, garantindo que os saldos estejam consistentes ao fim da execução, independente da ordem em que as transações foram feitas.
+
+
+## Dificuldades
+
+A implementação das Threads foi bem desafiador. As classes foram básicas, nenhum segredo se tiver noção de POO, mas a questão "Thread" foi de grande dificuldade por ser algo novo e sendo, pela primeira vez, implementado em um projeto individual meu.
