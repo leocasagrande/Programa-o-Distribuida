@@ -73,13 +73,16 @@ public class Main {
         int id = 1;
         for (Funcionario funcionario : funcionariosLoja1) {
         	System.out.println("Saldo final do salario do funcionario " + id + " da Loja 1: " + funcionario.getContaSalario().getSaldo());
+        	System.out.println("Saldo final da conta investimento do funcionario " + id + " da Loja 1: " + funcionario.getContaInvest().getSaldo());
         	id++;
         }
         id = 1;
         for (Funcionario funcionario : funcionariosLoja2) {
         	System.out.println("Saldo final do salario do funcionario " + id + " da Loja 2: " + funcionario.getContaSalario().getSaldo());
+        	System.out.println("Saldo final da conta investimento do funcionario " + id + " da Loja 2: " + funcionario.getContaInvest().getSaldo());
         	id++;
         }
+        
         for (Cliente cliente : clientes) {
         	System.out.println("Saldo final do cliente " + cliente.getConta().getCliente() + ": "  + cliente.getConta().getSaldo());
         }
